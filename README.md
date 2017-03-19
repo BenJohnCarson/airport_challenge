@@ -19,7 +19,7 @@ $ git clone https://github.com/BenJohnCarson/airport_challenge
 
 * Switch to ruby 2.2.3
 ```
-$ rvm use 2.3.3
+$ rvm use 2.2.3
 ```
 
 * Install gems
