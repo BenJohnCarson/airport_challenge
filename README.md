@@ -1,41 +1,71 @@
-Airport Challenge
-=================
+# Airport Challenge
+#### Technologies: Ruby, RSpec
 
+## Index
+* [Task](#Task)
+* [Installation](#Install)
+* [Usage](#Usage)
+* [Approach](#Approach)
+* [User Stories](#Stories)
 
-
-Task
------
-
+## <a name="Task">Task</a>
 This challenge was to write a piece of software to control the flow of planes at an airport, adhering to the requirements of a set of user stories.
 
-User Stories
--------------
+## <a name="Install">Installation</a>
+* Clone from github
+```
+$ git clone https://github.com/BenJohnCarson/airport_challenge
+```
 
-1. As an air traffic controller 
-So I can get passengers to a destination 
-I want to instruct a plane to land at an airport and confirm that it has landed 
+* Switch to ruby 2.2.3
+```
+$ rvm use 2.3.3
+```
 
-2. As an air traffic controller 
-So I can get passengers on the way to their destination 
-I want to instruct a plane to take off from an airport and confirm that it is no longer in the airport
+* Install gems
+```
+$ gem install bundler
+$ bundle
+```
 
-3. As an air traffic controller 
-To ensure safety 
-I want to prevent takeoff when weather is stormy 
+## <a name="Usage">Usage</a>
+Below is an irb transcript showing how to use the program. 
 
-4. As an air traffic controller 
-To ensure safety 
-I want to prevent landing when weather is stormy 
+```
+2.2.3 :001 > require './lib/plane.rb'
+ => true 
+2.2.3 :002 > airport = Airport.new
+ => #<Airport:0x000000012818f0 @weather=#<Weather:0x000000012818c8>, @capacity=10, @planes=[]> 
+2.2.3 :003 > plane = Plane.new
+ => #<Plane:0x000000012770d0 @landed=false, @airport=:flying> 
+2.2.3 :004 > plane.land(airport)
+ => #<Airport:0x000000012818f0 @weather=#<Weather:0x000000012818c8>, @capacity=10, @planes=[:plane]> 
+2.2.3 :005 > plane.take_off
+RuntimeError: Too stormy to take off
+        from /home/ubuntu/workspace/Projects/airport_challenge/lib/plane.rb:35:in `take_off_errors'
+        from /home/ubuntu/workspace/Projects/airport_challenge/lib/plane.rb:19:in `take_off'
+        from (irb):5
+        from /usr/local/rvm/rubies/ruby-2.2.3/bin/irb:11:in `<main>'
+2.2.3 :006 > plane.take_off
+ => :flying 
+2.2.3 :007 > small_airport = Airport.new(1)
+ => #<Airport:0x0000000122afa0 @weather=#<Weather:0x0000000122af50>, @capacity=1, @planes=[]> 
+2.2.3 :008 > plane2 = Plane.new
+ => #<Plane:0x00000001075430 @landed=false, @airport=:flying> 
+2.2.3 :009 > plane.land(small_airport)
+ => #<Airport:0x0000000122afa0 @weather=#<Weather:0x0000000122af50>, @capacity=1, @planes=[:plane]> 
+2.2.3 :010 > plane2.land(small_airport)
+RuntimeError: Airport full
+        from /home/ubuntu/workspace/Projects/airport_challenge/lib/plane.rb:29:in `landing_errors'
+        from /home/ubuntu/workspace/Projects/airport_challenge/lib/plane.rb:13:in `land'
+        from (irb):10
+        from /usr/local/rvm/rubies/ruby-2.2.3/bin/irb:11:in `<main>'
+```
 
-5. As an air traffic controller 
-To ensure safety 
-I want to prevent landing when the airport is full 
-
-6. As the system designer
-So that the software can be used for many different airports
-I would like a default airport capacity that can be overridden as appropriate
 
 
+
+## <a name="Approach">Approach</a>
 User Story 1
 -------------
 
@@ -74,39 +104,27 @@ I set the capacity using an attr\_reader capacity in the Airport class. I then u
 
 To prevent planes landing at full airports, I created a private method full?. This checks that the airport planes array isn't at capacity and is used to raise an error if it is.
 
+## <a name="Stories">User Stories</a>
+1. As an air traffic controller 
+So I can get passengers to a destination 
+I want to instruct a plane to land at an airport and confirm that it has landed 
 
-Instructions for use
----------------------
+2. As an air traffic controller 
+So I can get passengers on the way to their destination 
+I want to instruct a plane to take off from an airport and confirm that it is no longer in the airport
 
-Below is an irb transcript showing how to use the program. 
+3. As an air traffic controller 
+To ensure safety 
+I want to prevent takeoff when weather is stormy 
 
-```
-2.2.3 :001 > require './lib/plane.rb'
- => true 
-2.2.3 :002 > airport = Airport.new
- => #<Airport:0x000000012818f0 @weather=#<Weather:0x000000012818c8>, @capacity=10, @planes=[]> 
-2.2.3 :003 > plane = Plane.new
- => #<Plane:0x000000012770d0 @landed=false, @airport=:flying> 
-2.2.3 :004 > plane.land(airport)
- => #<Airport:0x000000012818f0 @weather=#<Weather:0x000000012818c8>, @capacity=10, @planes=[:plane]> 
-2.2.3 :005 > plane.take_off
-RuntimeError: Too stormy to take off
-        from /home/ubuntu/workspace/Projects/airport_challenge/lib/plane.rb:35:in `take_off_errors'
-        from /home/ubuntu/workspace/Projects/airport_challenge/lib/plane.rb:19:in `take_off'
-        from (irb):5
-        from /usr/local/rvm/rubies/ruby-2.2.3/bin/irb:11:in `<main>'
-2.2.3 :006 > plane.take_off
- => :flying 
-2.2.3 :007 > small_airport = Airport.new(1)
- => #<Airport:0x0000000122afa0 @weather=#<Weather:0x0000000122af50>, @capacity=1, @planes=[]> 
-2.2.3 :008 > plane2 = Plane.new
- => #<Plane:0x00000001075430 @landed=false, @airport=:flying> 
-2.2.3 :009 > plane.land(small_airport)
- => #<Airport:0x0000000122afa0 @weather=#<Weather:0x0000000122af50>, @capacity=1, @planes=[:plane]> 
-2.2.3 :010 > plane2.land(small_airport)
-RuntimeError: Airport full
-        from /home/ubuntu/workspace/Projects/airport_challenge/lib/plane.rb:29:in `landing_errors'
-        from /home/ubuntu/workspace/Projects/airport_challenge/lib/plane.rb:13:in `land'
-        from (irb):10
-        from /usr/local/rvm/rubies/ruby-2.2.3/bin/irb:11:in `<main>'
-```
+4. As an air traffic controller 
+To ensure safety 
+I want to prevent landing when weather is stormy 
+
+5. As an air traffic controller 
+To ensure safety 
+I want to prevent landing when the airport is full 
+
+6. As the system designer
+So that the software can be used for many different airports
+I would like a default airport capacity that can be overridden as appropriate
